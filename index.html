@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALIEN PEPE BY MATT FURIE</title>
+<link rel="icon" type="image/x-icon" href="logo.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<style>
+body {
+  background: #000;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* LOADER */
+#loader {
+  position: fixed;
+  width:100%;
+  height:100%;
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  font-size:24px;
+  color:#39ff14;
+}
+
+/* NAV */
+.nav {
+  backdrop-filter: blur(12px);
+  background: rgba(0,0,0,0.5);
+}
+
+/* GLOW */
+.glow {
+  box-shadow: 0 0 15px #39ff14, 0 0 40px #39ff14;
+}
+
+/* TICKERS */
+.ticker {
+  white-space: nowrap;
+  overflow: hidden;
+  transform: rotate(-3deg);
+}
+.ticker span {
+  display:inline-block;
+  padding-left:100%;
+  animation: ticker 12s linear infinite;
+}
+.ticker2 { transform: rotate(3deg); }
+
+@keyframes ticker {
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-100%);}
+}
+
+/* BUY BAR */
+#buyBar {
+  height:6px;
+  background: linear-gradient(90deg,#39ff14,#00ffcc);
+  width:0%;
+}
+
+/* CANVAS */
+#bg {
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:0;
+}
+
+/* HERO */
+.hero {
+  position:relative;
+  z-index:2;
+}
+
+
+
+
+
+
+.glow {
+  box-shadow: 0 0 10px #39ff14, 0 0 30px #39ff14;
+}
+
+/* dashed neon border */
+.border-dashed-green {
+  border: 2px dashed rgba(57,255,20,0.5);
+}
+
+
+
+
+
+.glow {
+  box-shadow: 0 0 12px #39ff14, 0 0 40px #39ff14;
+}
+
+
+/* subtle glow lines */
+.line-glow {
+  box-shadow: 0 0 10px #39ff14;
+}
+
+
+
+.faq-content {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 18px;
+  color: #aaa;
+  transition: max-height 0.3s ease;
+}
+
+
+.faq-item {
+  border: 1px solid rgba(57,255,20,0.2);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.4);
+  transition: 0.3s;
+}
+
+.faq-item.active {
+  border-color: #39ff14;
+  box-shadow: 0 0 15px rgba(57,255,20,0.2);
+}
+
+.faq-btn {
+  width: 100%;
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+
+
+.footer-link {
+  transition: 0.2s;
+}
+.footer-link:hover {
+  color: #39ff14;
+  transform: translateX(3px);
+}
+
+.footer-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(57,255,20,0.1);
+  color: #39ff14;
+  font-size: 12px;
+  transition: 0.3s;
+}
+
+.footer-icon:hover {
+  background: #39ff14;
+  color: black;
+  box-shadow: 0 0 15px #39ff14;
+}
+
+
+
+
+.nav-link {
+  position: relative;
+  transition: 0.3s;
+}
+
+.nav-link:hover {
+  color: #39ff14;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #39ff14;
+  transition: 0.3s;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link.active {
+  color: #39ff14;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+
+</style>
+</head>
+
+<body>
+
+  <button onclick="window.scrollTo({top:0,behavior:'smooth'})"
+class="fixed bottom-6 right-6 w-10 h-10 bg-green-400 text-black rounded-full flex items-center justify-center shadow-lg">
+↑
+</button>
+
+<!-- LOADER -->
+<div id="loader">Entering Space...</div>
+
+<canvas id="bg"></canvas>
+
+<!-- NAV -->
+<nav class="nav fixed w-full z-50 px-6 py-4 flex justify-between items-center">
+
+  <!-- LOGO -->
+  <div class="text-green-400 font-bold text-lg">
+    ALIEN PEPE BY MATT FURIE
+  </div>
+
+  <!-- DESKTOP MENU -->
+  <div class="hidden md:flex gap-6 text-sm">
+
+    <a href="#home" class="nav-link">Home</a>
+    <a href="#howto" class="nav-link">How to Buy</a>
+    <a href="#about" class="nav-link">About</a>
+    <a href="#tokenomics" class="nav-link">Tokenomics</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="flex items-center gap-4">
+
+    <!-- BUY BUTTON -->
+    <a href="https://app.uniswap.org/swap?chain=mainnet&inputCurrency=NATIVE&outputCurrency=0xComingSoon" class="bg-green-400 text-black px-4 py-2 rounded-full font-bold glow hidden md:block">
+      BUY NOW
+    </a>
+
+    <!-- MOBILE MENU BUTTON -->
+    <button id="menuBtn" class="md:hidden text-green-400 text-xl">
+      ☰
+    </button>
+
+  </div>
+
+  <!-- MOBILE MENU -->
+  <div id="mobileMenu" class="hidden absolute top-16 left-0 w-full bg-black text-center py-6 space-y-4 border-t border-green-400/20">
+
+    <a href="#home" class="block nav-link">Home</a>
+    <a href="#howto" class="block nav-link">How to Buy</a>
+    <a href="#about" class="block nav-link">About</a>
+    <a href="#tokenomics" class="block nav-link">Tokenomics</a>
+    <a href="#faq" class="block nav-link">FAQ</a>
+
+  </div>
+
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero h-screen flex flex-col justify-center items-center text-center">
+
+<h1 class="text-5xl md:text-7xl font-bold">
+Alien Pepe by<span class="text-green-400"> Matt Furie</span>
+</h1>
+
+<p class="text-gray-400 mt-4">Alien Pepe's cousins are now here to invade the world.</p>
+
+<img id="hero"
+src="logo1.png"
+class="w-72 mt-10">
+
+<!-- CONTRACT -->
+<div class="mt-6 flex gap-2 bg-black/50 px-4 py-2 rounded-full border border-green-400">
+<input id="contract" value="0xComingSoon" class="bg-transparent outline-none text-sm w-40">
+<button onclick="copy()" class="text-green-400">COPY</button>
+</div>
+
+</section>
+
+<!-- TICKERS -->
+<div class="absolute bottom-24 w-full ticker bg-black py-2 text-green-400">
+<span>🚀 NEXT 1000X COIN • JOIN X COMMUNITY NOW • LAUNCH NOW •</span>
+</div>
+
+<div class="absolute bottom-12 w-full ticker ticker2 bg-black py-2 text-green-400">
+<span>🔥 BUY EARLY • PUMP INCOMING • MEME POWER •</span>
+</div>
+
+<!-- BUY PRESSURE -->
+<div class="fixed bottom-0 w-full bg-black">
+<div id="buyBar"></div>
+</div>
+
+<!-- LIVE CHART -->
+<section id="chartSection" class="py-20 text-center">
+<h2 class="text-3xl mb-6">Live Chart</h2>
+
+<div id="chartWrapper" class="w-full max-w-4xl h-[400px] mx-auto rounded-xl bg-black overflow-hidden relative">
+</section>
+
+
+<section id="howto" class="py-24 relative bg-black text-center">
+
+  <!-- TITLE -->
+  <h2 class="text-4xl md:text-5xl font-bold mb-4">
+    How to Buy <span class="text-green-400">$ALIENPEPE</span>
+  </h2>
+
+  <p class="text-gray-400 mb-16 max-w-xl mx-auto">
+    Getting your hands on Alien Pepe is quick and easy! Follow these steps to join the community.
+  </p>
+
+  <!-- CARDS -->
+  <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
+
+    <!-- CARD 1 -->
+    <div class="relative group">
+      
+      <!-- STEP BADGE -->
+      <div class="absolute -top-6 left-1/2 -translate-x-1/2 
+      border border-green-400 rounded-full px-4 py-1 text-green-400 text-sm
+      bg-black">
+        01
+      </div>
+
+      <div class="p-8 rounded-2xl border border-green-400/30 
+      group-hover:border-green-400 transition
+      bg-gradient-to-b from-black to-green-900/10">
+
+        <img src="howto1.png" class="w-28 mx-auto mb-6">
+
+        <h3 class="text-xl font-bold mb-3">Set Up a Crypto Wallet</h3>
+
+        <p class="text-gray-400 text-sm">
+          You'll need a cryptocurrency wallet to store and trade your $ALIENPEPE
+        </p>
+      </div>
+    </div>
+
+    <!-- CARD 2 (HIGHLIGHT) -->
+    <div class="relative group scale-105">
+      
+      <div class="absolute -top-6 left-1/2 -translate-x-1/2 
+      border border-green-400 rounded-full px-4 py-1 text-green-400 text-sm
+      bg-black glow">
+        02
+      </div>
+
+      <div class="p-8 rounded-2xl border border-green-400 
+      bg-gradient-to-b from-black to-green-900/20 glow">
+
+        <img src="howto2.png" class="w-28 mx-auto mb-6">
+
+        <h3 class="text-xl font-bold mb-3">Select Token and Amount</h3>
+
+        <p class="text-gray-400 text-sm">
+          Choose your desired token and enter the amount you wish to purchase
+        </p>
+      </div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="relative group">
+      
+      <div class="absolute -top-6 left-1/2 -translate-x-1/2 
+      border border-green-400 rounded-full px-4 py-1 text-green-400 text-sm
+      bg-black">
+        03
+      </div>
+
+      <div class="p-8 rounded-2xl border border-green-400/30 
+      group-hover:border-green-400 transition
+      bg-gradient-to-b from-black to-green-900/10">
+
+        <img src="howto3.png" class="w-28 mx-auto mb-6">
+
+        <h3 class="text-xl font-bold mb-3">Buy and Hold Alien Pepe</h3>
+
+        <p class="text-gray-400 text-sm">
+          Click "Buy Now" and follow the on-screen instructions from your wallet
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<section id="about" class="relative py-24 bg-black overflow-hidden">
+
+  <!-- HUGE BACKGROUND TEXT -->
+  <h1 class="absolute inset-0 flex justify-center items-center
+  text-[120px] md:text-[220px] font-extrabold text-green-900/10 select-none pointer-events-none">
+    ALIEN PEPE BY MATT FURIE
+  </h1>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+
+    <!-- LEFT IMAGE -->
+    <div class="flex justify-center">
+      <img id="aboutImg"
+        src="about.png"
+        class="w-80 md:w-[420px]">
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div>
+
+      <h2 class="text-4xl md:text-5xl font-bold mb-4">
+        Welcome to <span class="text-green-400">ALIEN PEPE BY MATT FURIE</span>
+      </h2>
+
+      <h4 class="text-sm text-green-400 mb-4">
+        The Story Behind the Meme
+      </h4>
+
+      <p class="text-gray-400 mb-6 leading-relaxed">
+        Matt Furie's original Alien Pepe was captured by the American government and has been held within Area 51 for 69 years. 
+        Alien Pepe's cousins are now here to invade the world, save Alien Pepe and probe some ass.
+      </p>
+
+      <!-- BULLETS -->
+      <div class="space-y-3 mb-6">
+        <div class="flex items-center gap-3">
+          <span class="text-green-400">✔</span>
+          <p>No VCs, no big corporations, just pure meme magic!</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-green-400">✔</span>
+          <p>Memes rule the internet, and so do we!</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-green-400">✔</span>
+          <p>The alien frog doesn’t hop, it leaps to greatness!</p>
+        </div>
+      </div>
+
+      <!-- BUTTON -->
+      <a href="https://app.uniswap.org/swap?chain=mainnet&inputCurrency=NATIVE&outputCurrency=0xComingSoon"
+   target="_blank"
+   class="bg-green-400 text-black px-6 py-3 rounded-full font-bold glow inline-block">
+  BUY $ALIENPEPE
+</a>
+
+      <!-- REWARD BOX -->
+      <div class="mt-10 border-2 border-dashed border-green-400 rounded-2xl p-6 max-w-md">
+        <h3 class="text-xl font-bold mb-2">100% creator rewards</h3>
+        <p class="text-gray-400 text-sm">
+          100% of token creator rewards will be allocated to marketing initiatives, supporting longterm growth and strengthening the Alien Pepe ecosystem.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+
+
+<section id="tokenomics" class="relative py-32 bg-black text-center overflow-hidden">
+
+  <!-- TITLE -->
+  <h2 class="text-4xl md:text-5xl font-bold mb-4">
+    Tokenomics
+  </h2>
+
+  <p class="text-gray-400 mb-20 max-w-xl mx-auto">
+    Discover our tokenomics: fair distribution, strong rewards, and growth potential fueling our crypto journey! 🚀
+  </p>
+
+  <!-- MAIN WRAPPER -->
+  <div class="relative max-w-6xl mx-auto flex justify-center items-center">
+
+    <!-- CENTER IMAGE -->
+    <img id="tokenImg"
+      src="howto3.png"
+      class="w-64 md:w-80 z-10">
+
+    <!-- LEFT TOP -->
+    <div class="absolute left-0 top-10 text-right hidden md:block">
+      <p class="font-bold">Total Token Alien Pepe Supply</p>
+      <p class="text-gray-400 text-sm">(1,000,000,0000 Tokens)</p>
+      <div class="h-[2px] w-40 bg-green-400 mt-2 ml-auto"></div>
+    </div>
+
+    <!-- LEFT MIDDLE -->
+    <div class="absolute left-0 top-1/2 -translate-y-1/2 text-right hidden md:block">
+      <p class="font-bold">Creator Rewards / Marketing</p>
+      <p class="text-gray-400 text-sm">(100% of creator rewards will be used.)</p>
+      <div class="h-[2px] w-40 bg-green-400 mt-2 ml-auto"></div>
+    </div>
+
+    <!-- LEFT BOTTOM -->
+    <div class="absolute left-0 bottom-10 text-right hidden md:block">
+      <p class="font-bold">Launch Platform</p>
+      <p class="text-gray-400 text-sm">( The token will be officialy launch on Ethereum )</p>
+      <div class="h-[2px] w-40 bg-green-400 mt-2 ml-auto"></div>
+    </div>
+
+    <!-- RIGHT TOP -->
+    <div class="absolute right-0 top-10 text-left hidden md:block">
+      <p class="font-bold">Chain / Network</p>
+      <p class="text-gray-400 text-sm">(Alien Pepe will be deployed on EthereumChain.)</p>
+      <div class="h-[2px] w-40 bg-green-400 mt-2"></div>
+    </div>
+
+    <!-- RIGHT BOTTOM -->
+    <div class="absolute right-0 bottom-10 text-left hidden md:block">
+      <p class="font-bold">Token Ticker / Symbol</p>
+      <p class="text-gray-400 text-sm">(The official ticker is $ALIENPEPE.)</p>
+      <div class="h-[2px] w-40 bg-green-400 mt-2"></div>
+    </div>
+
+  </div>
+
+  <!-- MOBILE STACK -->
+  <div class="md:hidden mt-16 px-6">
+
+  <!-- IMAGE CENTER -->
+  <div class="flex justify-center mb-10">
+    
+  </div>
+
+  <!-- GRID CARDS -->
+  <div class="grid grid-cols-1 gap-6">
+
+    <div class="p-5 rounded-xl border border-green-400/30 bg-black/50">
+      <p class="font-bold text-green-400">Total Token Alien Pepe Supply</p>
+      <p class="text-gray-400 text-sm">(1,000,000,0000 Tokens)</p>
+    </div>
+
+    <div class="p-5 rounded-xl border border-green-400/30 bg-black/50">
+      <p class="font-bold text-green-400">Creator Rewards / Marketing</p>
+      <p class="text-gray-400 text-sm">(100% of creator rewards will be used.)</p>
+    </div>
+
+    <div class="p-5 rounded-xl border border-green-400/30 bg-black/50">
+      <p class="font-bold text-green-400">Launch Platform</p>
+      <p class="text-gray-400 text-sm">( The token will be officialy launch on Ethereum platform. )</p>
+    </div>
+
+    <div class="p-5 rounded-xl border border-green-400/30 bg-black/50">
+      <p class="font-bold text-green-400">Chain / Network </p>
+      <p class="text-gray-400 text-sm">(Alien Pepe will be deployed on EthereumChain.)</p>
+    </div>
+
+  </div>
+
+</div>
+
+</section>
+
+
+<section id="faq" class="py-24 bg-black">
+
+  <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+
+    <!-- LEFT -->
+    <div>
+
+      <h2 class="text-4xl md:text-5xl font-bold mb-4">
+        FAQs
+      </h2>
+
+      <p class="text-gray-400 mb-10 max-w-md">
+        Got questions? We've got answers! Explore our FAQs to learn all about our meme coin adventure 🚀
+      </p>
+
+      <!-- ACCORDION -->
+      <div class="space-y-4">
+
+  <div class="faq-item">
+    <button class="faq-btn">
+      <span>1. What is $ALIENPEPE?</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="faq-content">
+      Alien Pepe is a Matt Furie’s creation. ALIEN came from space to take you to the moon.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-btn">
+      <span>2. How do I buy Alien Pepe?</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="faq-content">
+      Connect your wallet, choose your amount, and swap directly through our platform or supported DEX.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-btn">
+      <span>3. Which chain is Alien Pepe on?</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="faq-content">
+      Alien Pepe is deployed on the Ethereum blockchain for fast and low-cost transactions.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-btn">
+      <span>4. Is there a roadmap?</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="faq-content">
+      No roadmap 100% community powered
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-btn">
+      <span>5. How can I join the community?</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="faq-content">
+      Join our Telegram and follow official Alien Pepe X page, stay updated and participate in events.
+    </div>
+  </div>
+
+</div>
+    </div>
+
+    <!-- RIGHT IMAGE -->
+    <div class="flex justify-center">
+      <img id="faqImg"
+        src="howto2.png"
+        class="w-72 md:w-[400px]">
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<footer class="relative bg-black pt-24 pb-10 overflow-hidden">
+
+  <!-- BACKGROUND GLOW -->
+  <div class="absolute inset-0 bg-gradient-to-r from-green-900/10 via-transparent to-yellow-900/10 blur-3xl opacity-40"></div>
+
+  <div class="relative max-w-7xl mx-auto px-6">
+
+    <!-- TOP GRID -->
+    <div class="grid md:grid-cols-3 gap-12 mb-16">
+
+      <!-- BRAND -->
+      <div>
+        <h2 class="text-2xl font-bold text-green-400 mb-3">ALIEN PEPE BY MATT FURIE</h2>
+        <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+          Matt Furie's original Alien Pepe has landed — and it’s taking over crypto.
+        </p>
+
+        <!-- SOCIALS -->
+        <div class="flex gap-3">
+          <a href="https://x.com/AlienPepeMeme" class="footer-icon">
+  <img src="x-icon.png" alt="twitter" class="w-4 h-4">
+</a>
+          <a href="https://dexscreener.com/ethereum/0xComingSoon" class="footer-icon">
+  <img src="dex-icon.png" alt="twitter" class="w-4 h-4">
+</a>
+          <a href="https://www.dextools.io/app/ether/pair-explorer/DiQqC5eXucufSPPa4GMnaH6PTH9PV1vGurRVK7Y3yg61" class="footer-icon">
+  <img src="dextools-icon.png" alt="twitter" class="w-4 h-4">
+</a>
+          <a href="https://www.coingecko.com/en/coins/alien-pepe" class="footer-icon">
+  <img src="gecko-icon.png" alt="twitter" class="w-4 h-4">
+</a>
+        </div>
+      </div>
+
+      <!-- NAV -->
+      <div>
+        <h3 class="font-semibold mb-4 text-white">Navigation</h3>
+        <ul class="space-y-2 text-gray-400 text-sm">
+          <li><a href="#home" class="footer-link">Home</a></li>
+          <li><a href="#howto" class="footer-link">About</a></li>
+          <li><a href="#about" class="footer-link">Tokenomics</a></li>
+          <li><a href="#tokenomics" class="footer-link">How to Buy</a></li>
+          <li><a href="#faq" class="footer-link">FAQ</a></li>
+        </ul>
+      </div>
+
+      <!-- NEWSLETTER -->
+      <div>
+        <h3 class="font-semibold mb-4 text-white">Stay Updated</h3>
+
+        <div class="flex items-center bg-black/50 border border-green-400/20 rounded-full overflow-hidden">
+          <input 
+            type="email" 
+            placeholder="Enter your email"
+            class="w-full px-4 py-3 bg-transparent outline-none text-sm"
+          >
+          <button class="bg-green-400 text-black px-5 py-3 font-bold hover:brightness-110">
+            Join
+          </button>
+        </div>
+
+        <p class="text-gray-500 text-xs mt-3">
+          No spam. Only alpha.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/30 to-transparent mb-6"></div>
+
+    <!-- BOTTOM -->
+    <div class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+
+      <p>© 2026 ALIENPEPE by Matt Furie. not from Earth, built for the moon.🚀</p>
+
+      <div class="flex gap-6 mt-4 md:mt-0">
+        <a href="#" class="footer-link">Privacy</a>
+        <a href="#" class="footer-link">Terms</a>
+        <a href="#" class="footer-link">Disclaimer</a>
+      </div>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+<script>
+
+/* LOADER */
+window.onload = () => {
+  setTimeout(()=>{
+    document.getElementById("loader").style.display="none";
+  },1200);
+};
+
+
+
+/* HERO FLOAT */
+gsap.to("#hero",{y:-20,repeat:-1,yoyo:true,duration:2});
+
+/* PARALLAX */
+document.addEventListener("mousemove",e=>{
+  gsap.to("#hero",{
+    x:(e.clientX/window.innerWidth-0.5)*30,
+    y:(e.clientY/window.innerHeight-0.5)*30,
+    duration:0.3
+  });
+});
+
+/* BUY BAR FAKE */
+let width=0;
+setInterval(()=>{
+  width += Math.random()*5;
+  if(width>100) width=0;
+  document.getElementById("buyBar").style.width=width+"%";
+},500);
+
+/* PARTICLES GRID */
+const c=document.getElementById("bg");
+const ctx=c.getContext("2d");
+c.width=innerWidth;
+c.height=innerHeight;
+
+let dots=[];
+for(let i=0;i<100;i++){
+  dots.push({x:Math.random()*c.width,y:Math.random()*c.height});
+}
+
+function draw(){
+  ctx.clearRect(0,0,c.width,c.height);
+
+  dots.forEach(d=>{
+    d.x+=0.2;
+    d.y+=0.2;
+
+    if(d.x>c.width)d.x=0;
+    if(d.y>c.height)d.y=0;
+
+    ctx.fillStyle="#39ff14";
+    ctx.fillRect(d.x,d.y,2,2);
+  });
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+</script>
+
+
+<script>
+function copy(){
+  const text = document.getElementById("contract").value;
+
+  navigator.clipboard.writeText(text).then(()=>{
+    showCopied();
+  }).catch(()=>{
+    fallbackCopy(text);
+  });
+}
+
+/* fallback for older browsers */
+function fallbackCopy(text){
+  const temp = document.createElement("textarea");
+  temp.value = text;
+  document.body.appendChild(temp);
+  temp.select();
+  document.execCommand("copy");
+  document.body.removeChild(temp);
+  showCopied();
+}
+
+/* nice UI feedback */
+function showCopied(){
+  const btn = document.querySelector("button[onclick='copy()']");
+  const original = btn.innerText;
+
+  btn.innerText = "COPIED!";
+  btn.classList.add("text-white");
+
+  setTimeout(()=>{
+    btn.innerText = original;
+    btn.classList.remove("text-white");
+  },1500);
+}
+</script>
+
+
+<script>
+gsap.from("#aboutImg", {
+  x: -100,
+  opacity: 0,
+  duration: 1,
+  scrollTrigger: "#aboutImg"
+});
+
+gsap.from("section h2", {
+  x: 100,
+  opacity: 0,
+  duration: 1,
+  scrollTrigger: "section h2"
+});
+</script>
+
+
+<script>
+gsap.from("#tokenImg", {
+  scale: 0.8,
+  opacity: 0,
+  duration: 1,
+  scrollTrigger: "#tokenImg"
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const items = document.querySelectorAll(".faq-item");
+
+  items.forEach((item, index) => {
+    const btn = item.querySelector(".faq-btn");
+    const content = item.querySelector(".faq-content");
+    const arrow = item.querySelector(".arrow");
+
+    btn.addEventListener("click", () => {
+
+      const isOpen = item.classList.contains("active");
+
+      // close all
+      items.forEach(i => {
+        i.classList.remove("active");
+        gsap.to(i.querySelector(".faq-content"), {
+          maxHeight: 0,
+          duration: 0.3
+        });
+        i.querySelector(".arrow").style.transform = "rotate(0deg)";
+      });
+
+      // open clicked
+      if (!isOpen) {
+        item.classList.add("active");
+
+        gsap.to(content, {
+          maxHeight: content.scrollHeight + "px",
+          duration: 0.4,
+          ease: "power2.out"
+        });
+
+        arrow.style.transform = "rotate(180deg)";
+      }
+
+    });
+
+    // AUTO OPEN FIRST
+    if(index === 0){
+      item.classList.add("active");
+      content.style.maxHeight = content.scrollHeight + "px";
+      arrow.style.transform = "rotate(180deg)";
+    }
+
+  });
+
+});
+</script>
+
+
+<script>
+/* MOBILE MENU */
+const btn = document.getElementById("menuBtn");
+const menu = document.getElementById("mobileMenu");
+
+btn.addEventListener("click", () => {
+  menu.classList.toggle("hidden");
+});
+
+/* ACTIVE LINK ON SCROLL */
+const sections = document.querySelectorAll("section");
+const navLinks = document.querySelectorAll(".nav-link");
+
+window.addEventListener("scroll", () => {
+  let current = "";
+
+  sections.forEach(section => {
+    const top = section.offsetTop - 120;
+    if (scrollY >= top) {
+      current = section.getAttribute("id");
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.classList.remove("active");
+    if (link.getAttribute("href") === "#" + current) {
+      link.classList.add("active");
+    }
+  });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.focus();
+});
+</script>
+
+
+
+
+<script>
+let chartLoaded = false;
+
+window.addEventListener("scroll", () => {
+
+  if (chartLoaded) return;
+
+  const section = document.getElementById("chartSection");
+  const rect = section.getBoundingClientRect();
+
+  // only load when user actually scrolls DOWN into it
+  if (rect.top < window.innerHeight - 100) {
+
+    chartLoaded = true;
+
+    document.getElementById("chartWrapper").innerHTML = `
+  <iframe 
+    id="chartFrame"
+    src="https://dexscreener.com/ethereum/DiQqC5eXucufSPPa4GMnaH6PTH9PV1vGurRVK7Y3yg61?embed=1&theme=dark"
+    style="width:100%; height:100%; border:none; display:block;"
+  ></iframe>
+`;
+  }
+});
+
+
+
+
+</script>
+
+
+
+
+
+</body>
+</html>
